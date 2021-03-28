@@ -42,15 +42,15 @@ class Bot(Coinmarketcap):
         for_incoming_updates = f'{URL_TELEGRAM}setWebhook'
 
         if IS_LOCALHOST:
-            from tunnel import TUNNEL_URL
+            from utils import tunnel as t
 
-            if is_webhook == TUNNEL_URL:
+            if is_webhook == t.TUNNEL_URL:
                 print('\tis session TUNNEL_URL', file=sys.stderr)
                 return
 
             self.session.get(URL_TELEGRAM + 'deleteWebhook')
             time.sleep(0.2)
-            r = self.session.get(for_incoming_updates, params={'url': TUNNEL_URL})
+            r = self.session.get(for_incoming_updates, params={'url': t.TUNNEL_URL})
             print(f'\t\tsetWebhook -> TUNNEL_URL: {r.json()}', file=sys.stderr)
             return
 
