@@ -9,7 +9,7 @@ from flask import Flask
 from flask import request
 from flask import jsonify
 
-import utils
+from .db import shelve_db
 from bot import Bot, IS_LOCALHOST
 
 
@@ -43,7 +43,7 @@ def main() -> str:
             chat_id = r['message']['chat']['id']
             message = r['message']['text'].lower().strip()
 
-            session = utils.check_user_session(chat_id)
+            session = shelve_db.has_user_session(chat_id)
 
             need_more_info = message in ('information', '/info', 'info', 'i')
             need_help = message in ('/start', '/help', 'h', 'sos')
@@ -52,9 +52,9 @@ def main() -> str:
                   session={session}', file=sys.stderr)
                 
             if need_more_info and not session:
-                data: str = utils.get_error('session')
+                data: str = shelve_db.display_error_message('session')
             elif need_more_info and session:
-                id_coin: int = utils.get_last_id_coin(chat_id)
+                id_coin: int = shelve_db.fetch_last_coin_id(chat_id)
                 data: str = bot.get_info(id_coin)                
             elif need_help:
                 # re because multi-line messages preserve spaces
@@ -64,8 +64,8 @@ def main() -> str:
                        For more information about coin, enter `info` or `i`""")
             else:
                 id_coin = bot.get_coin_id(message) # int or None
-                data = bot.get_price(id_coin) if id_coin else utils.get_error('match')
-                utils.touch_session(chat_id, id_coin) # create or update
+                data = bot.get_price(id_coin) if id_coin else shelve_db.display_error_message('match')
+                shelve_db.touch_session(chat_id, id_coin) # create or update
 
         except KeyError:
             bot._CALLBACK_QUERY_ID = r['callback_query']['id']
@@ -73,7 +73,7 @@ def main() -> str:
             chat_id = message['chat']['id']
             callback_data = message['reply_markup']['inline_keyboard'][0][0]['callback_data']
 
-            data = callback_data if callback_data else utils.get_error('unknown')
+            data = callback_data if callback_data else shelve_db.display_error_message('unknown')
 
             print(f'main/except: click Buy={bot._CALLBACK_QUERY_ID}, \
                   message={message}, data={data}', file=sys.stderr)

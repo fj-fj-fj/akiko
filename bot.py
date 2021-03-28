@@ -6,7 +6,7 @@ import json
 import time
 import sys
 
-import utils
+from .db import shelve_db
 from coinmarketcap import Coinmarketcap
 
 try:
@@ -98,7 +98,7 @@ class Bot(Coinmarketcap):
             data['text'] += text
             data['reply_markup'] = {
                     'inline_keyboard': [
-                        [{'text': '฿uy' if utils.get_last_id_coin(chat_id) == 1 else 'Buy',
+                        [{'text': '฿uy' if shelve_db.fetch_last_coin_id(chat_id) == 1 else 'Buy',
                           'callback_data': 'In the near future you can do it'}]
                     ]
             }
