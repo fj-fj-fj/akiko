@@ -9,11 +9,15 @@ from flask import Flask
 from flask import request
 from flask import jsonify
 
+from config import CONFIG_KWARGS
 from db import shelve_db
-from bot import Bot, IS_LOCALHOST
+from bot import Bot
 
 
 app = Flask(__name__)
+bot = Bot(**CONFIG_KWARGS)
+bot.webhook()
+
 
 @app.route('/', methods=['POST', 'GET'])
 def main() -> str:
@@ -28,12 +32,8 @@ def main() -> str:
         :return: (str)coin price / coin information / [match/session/unknown] error
 
     """
-    tim = 'Arise, you have nothing to lose but your barbed wire fences!'
 
     print(' * START main.main() * '.center(130, '~'), file=sys.stderr)
-
-    bot = Bot()
-    bot.webhook()
 
     if request.method == 'POST':
 
@@ -84,9 +84,8 @@ def main() -> str:
 
         return jsonify(r)
 
-    web = f'<h1>Bot welcomes You!</h1><hr><a href="https://activism.net/cypherpunk/crypto-anarchy.html">{tim}</a>'
-    return web
+    return bot.HTML
 
 
 if __name__ == '__main__':
-    app.run(debug=IS_LOCALHOST)
+    app.run(debug=bot.IS_LOCALHOST)

@@ -13,8 +13,6 @@ __all__ = (
     'display_error_message'
 )
 
-logging.basicConfig(level=logging.DEBUG)
-
 loger = logging.getLogger(__file__)
 
 _SHELVE_DB = 'shelve.db'

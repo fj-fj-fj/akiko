@@ -6,25 +6,18 @@ import json
 import time
 import sys
 
-from db import shelve_db
 from api.coinmarketcap.core import CoinDataFetcher
+from db import shelve_db
 
-try:
-    from misc import TOKEN, APP_NAME
-except (ModuleNotFoundError, ImportError):
-    import os
-
-    TOKEN = os.environ.get('TOKEN')
-    APP_NAME = os.environ.get('APP_NAME')
-    HOUM_USER = os.environ.get('HOUM_USER')
-
-
-IS_LOCALHOST = 'misc' in sys.modules
-
-URL_TELEGRAM = f'https://api.telegram.org/bot{TOKEN}/'
 
 class Bot(CoinDataFetcher):
     _CALLBACK_QUERY_ID = 0
+
+    def __init__(self, **kwargs: dict) -> None:
+        super().__init__(**kwargs['coinmarketcap'])
+
+        for key, value in kwargs['bot'].items():
+            setattr(Bot, key, value)
 
     def webhook(self):
         """This function first gets the getWebhookinfo object. 
@@ -35,32 +28,32 @@ class Bot(CoinDataFetcher):
         but the development is not underway.
 
         """
-        r = self.session.get(f'{URL_TELEGRAM}getwebhookinfo').json()
+        r = self.session.get(f'{Bot.URL}getwebhookinfo').json()
         print(f'\nBot.webhook response: {r}', file=sys.stderr)
         
         is_webhook = r['result']['url']
-        for_incoming_updates = f'{URL_TELEGRAM}setWebhook'
+        for_incoming_updates = f'{Bot.URL}setWebhook'
 
-        if IS_LOCALHOST:
+        if Bot.IS_LOCALHOST:
             from utils import tunnel as t
 
             if is_webhook == t.TUNNEL_URL:
                 print('\tis session TUNNEL_URL', file=sys.stderr)
                 return
 
-            self.session.get(URL_TELEGRAM + 'deleteWebhook')
+            self.session.get(Bot.URL + 'deleteWebhook')
             time.sleep(0.2)
             r = self.session.get(for_incoming_updates, params={'url': t.TUNNEL_URL})
             print(f'\t\tsetWebhook -> TUNNEL_URL: {r.json()}', file=sys.stderr)
             return
 
-        if is_webhook == APP_NAME:
+        if is_webhook == Bot.APP_NAME:
             print('\tis session APP_NAME', file=sys.stderr)
             return
 
-        self.session.get(URL_TELEGRAM + 'deleteWebhook')
+        self.session.get(Bot.URL + 'deleteWebhook')
         time.sleep(0.2)
-        r = self.session.get(for_incoming_updates, params={'url': APP_NAME})
+        r = self.session.get(for_incoming_updates, params={'url': Bot.APP_NAME})
         print(f'\t\tsetWebhook -> APP_NAME: {r.json()}', file=sys.stderr)
         return
 
@@ -75,7 +68,7 @@ class Bot(CoinDataFetcher):
         """
         print(f'\nBot.send_message(chat_id={chat_id}, text={text})\n', file=sys.stderr)
 
-        url = URL_TELEGRAM + 'sendMessage'
+        url = Bot.URL + 'sendMessage'
         data = {
             'chat_id': chat_id, 
             'text': ''
