@@ -6,7 +6,7 @@ import json
 import time
 import sys
 
-from .db import shelve_db
+from db import shelve_db
 from coinmarketcap import Coinmarketcap
 
 try:

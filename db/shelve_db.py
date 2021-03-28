@@ -15,7 +15,7 @@ __all__ = (
 
 logging.basicConfig(level=logging.DEBUG)
 
-loger = logging.getLoger(__file__)
+loger = logging.getLogger(__file__)
 
 _SHELVE_DB = 'shelve.db'
 
