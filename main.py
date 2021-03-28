@@ -16,7 +16,7 @@ from bot import Bot
 
 app = Flask(__name__)
 bot = Bot(**CONFIG_KWARGS)
-bot.webhook()
+bot.update_webhook()
 
 
 @app.route('/', methods=['POST', 'GET'])

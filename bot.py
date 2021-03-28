@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """This module contains class Bot"""
-
 import json
-import time
 import sys
+import time
 
 from api.coinmarketcap.core import CoinDataFetcher
 from db import shelve_db
+from utils.webhook import configurate_webhook
 
 
 class Bot(CoinDataFetcher):
@@ -19,44 +19,8 @@ class Bot(CoinDataFetcher):
         for key, value in kwargs['bot'].items():
             setattr(Bot, key, value)
 
-    def webhook(self):
-        """This function first gets the getWebhookinfo object. 
-        Then it gets the webhook URL from it, which can be empty. 
-        Then he checks the machine for localization. If it is a working host, 
-        checks for a webhook URL and hangs a hook to continue development. 
-        Or installs a webhook on a remote server if it was removed for some reason, 
-        but the development is not underway.
-
-        """
-        r = self.session.get(f'{Bot.URL}getwebhookinfo').json()
-        print(f'\nBot.webhook response: {r}', file=sys.stderr)
-        
-        is_webhook = r['result']['url']
-        for_incoming_updates = f'{Bot.URL}setWebhook'
-
-        if Bot.IS_LOCALHOST:
-            from utils import tunnel as t
-
-            if is_webhook == t.TUNNEL_URL:
-                print('\tis session TUNNEL_URL', file=sys.stderr)
-                return
-
-            self.session.get(Bot.URL + 'deleteWebhook')
-            time.sleep(0.2)
-            r = self.session.get(for_incoming_updates, params={'url': t.TUNNEL_URL})
-            print(f'\t\tsetWebhook -> TUNNEL_URL: {r.json()}', file=sys.stderr)
-            return
-
-        if is_webhook == Bot.APP_NAME:
-            print('\tis session APP_NAME', file=sys.stderr)
-            return
-
-        self.session.get(Bot.URL + 'deleteWebhook')
-        time.sleep(0.2)
-        r = self.session.get(for_incoming_updates, params={'url': Bot.APP_NAME})
-        print(f'\t\tsetWebhook -> APP_NAME: {r.json()}', file=sys.stderr)
-        return
-
+    def update_webhook(self) -> None:
+        configurate_webhook(self)
 
     def send_message(self, chat_id: int, text: str) -> str:
         """The funcion sends users a message.
