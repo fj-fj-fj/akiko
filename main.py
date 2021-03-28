@@ -21,8 +21,8 @@ def main() -> str:
                         * * * Main function * * *
 
         If entered correctly (coin name/ticker) returns the price of the coin, 
-        otherwise a match error (see self.get_coin_id(), self.get_price())
-        When requesting information about a coin, returns links (see self.get_info()) or
+        otherwise a match error (see self.fetch_coin_id(), self.extract_coin_price())
+        When requesting information about a coin, returns links (see self.display_coin_info()) or
         if the coin was not selected a session error
 
         :return: (str)coin price / coin information / [match/session/unknown] error
@@ -55,7 +55,7 @@ def main() -> str:
                 data: str = shelve_db.display_error_message('session')
             elif need_more_info and session:
                 id_coin: int = shelve_db.fetch_last_coin_id(chat_id)
-                data: str = bot.get_info(id_coin)                
+                data: str = bot.display_coin_info(id_coin)                
             elif need_help:
                 # re because multi-line messages preserve spaces
                 data = re.sub(r'((?!\n)\s+)', ' ', f"""I'm *Akiko* and i use coinmarketcap API\n
@@ -63,8 +63,8 @@ def main() -> str:
                        (e.g. `Dogecoin` | `Doge`, `Bitcoin` | `BTC`)\n
                        For more information about coin, enter `info` or `i`""")
             else:
-                id_coin = bot.get_coin_id(message) # int or None
-                data = bot.get_price(id_coin) if id_coin else shelve_db.display_error_message('match')
+                id_coin = bot.fetch_coin_id(message) # int or None
+                data = bot.extract_coin_price(id_coin) if id_coin else shelve_db.display_error_message('match')
                 shelve_db.touch_session(chat_id, id_coin) # create or update
 
         except KeyError:

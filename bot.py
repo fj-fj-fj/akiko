@@ -7,7 +7,7 @@ import time
 import sys
 
 from db import shelve_db
-from coinmarketcap import Coinmarketcap
+from api.coinmarketcap.core import CoinDataFetcher
 
 try:
     from misc import TOKEN, APP_NAME
@@ -23,7 +23,7 @@ IS_LOCALHOST = 'misc' in sys.modules
 
 URL_TELEGRAM = f'https://api.telegram.org/bot{TOKEN}/'
 
-class Bot(Coinmarketcap):
+class Bot(CoinDataFetcher):
     _CALLBACK_QUERY_ID = 0
 
     def webhook(self):
