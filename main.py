@@ -1,14 +1,11 @@
-from logging import Logger
+from typing import Union
 
-from flask import Flask
-from flask import request
-from flask import jsonify
+from flask import Flask, Response, jsonify, request
 
 from api.telegram.bot import Bot
 from api.telegram.utils import form_response_to_user
 from config import CONFIG_KWARGS
 
-logger: Logger = Logger(__file__)
 
 app = Flask(__name__)
 bot = Bot(**CONFIG_KWARGS)
@@ -16,31 +13,12 @@ bot.update_webhook()
 
 
 @app.route('/', methods=['POST', 'GET'])
-def main() -> str:
-    """
-                        * * * Main function * * *
-
-        If entered correctly (coin name/ticker) returns the price of the coin, 
-        otherwise a match error (see self.fetch_coin_id(), self.extract_coin_price())
-        When requesting information about a coin, returns links (see self.display_coin_info()) or
-        if the coin was not selected a session error
-
-        :return: (str)coin price / coin information / [match/session/unknown] error
-
-    """
-
-    logger.debug(' * BOT STARTED * '.center(130, '~'))
-
+def main(bot: object) -> Union[Response, str]:
     if request.method == 'POST':
-        r = request.get_json()
-        print(type(r))
+        r: dict = request.get_json()
         chat_id, data = form_response_to_user(bot, r)
         bot.send_message(chat_id, text=data)
-
-        logger.debug(f' * bot FINISHED * \n{jsonify(r)}\n\n')
-
         return jsonify(r)
-
     return bot.HTML
 
 
