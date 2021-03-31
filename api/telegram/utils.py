@@ -42,7 +42,7 @@ def _form_data_response(bot, chat_id, message):
     elif user_needs_help:
         data: str = WELCOME_MESSAGE
     else:
-        if bot.fetch_coin_id(message):
+        if (id_coin := bot.fetch_coin_id(message)):
             data: str = bot.extract_coin_price(id_coin)
         else:
             data: str = display_error_message('match')
