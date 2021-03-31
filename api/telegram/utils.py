@@ -8,15 +8,17 @@ logger: Logger = Logger(__file__)
 
 
 def form_response_to_user(bot: object, r: dict) -> Tuple[str, str]:
+    info_patterns = 'information /info info i'.split()
+    help_patterns = '/start /help h sos'.split()
+
     try:
         chat_id: str = r['message']['chat']['id']
         message: str = r['message']['text'].lower().strip()
 
         user_has_session: bool = shelve_db.has_user_session(chat_id)
 
-        user_wants_more_info: bool = message in \
-            ('information', '/info', 'info', 'i')
-        user_needs_help: bool = message in ('/start', '/help', 'h', 'sos')
+        user_wants_more_info: bool = message in info_patterns
+        user_needs_help: bool = message in help_patterns
 
         logger.debug(f'{message=}, {user_wants_more_info=}, {user_has_session=}')  # noqa: E501
 

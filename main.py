@@ -8,7 +8,7 @@ from api.telegram.bot import Bot
 from api.telegram.utils import form_response_to_user
 from config import CONFIG_KWARGS
 
-logger: Logger = logger(__file__)
+logger: Logger = Logger(__file__)
 
 app = Flask(__name__)
 bot = Bot(**CONFIG_KWARGS)
