@@ -12,7 +12,7 @@ def form_response_to_user(bot: object, r: dict) -> Tuple[str, str]:
         chat_id: str = r['message']['chat']['id']
         message: str = r['message']['text'].lower().strip()
 
-        data: str = _form_data_response(chat_id, message)
+        data: str = _form_data_response(bot, chat_id, message)
     except KeyError:
         bot._CALLBACK_QUERY_ID: str = r['callback_query']['id']
         message: str = r['callback_query']['message']
@@ -28,8 +28,9 @@ def form_response_to_user(bot: object, r: dict) -> Tuple[str, str]:
     return (chat_id, data)
 
 
-def _form_data_response(bot: object, chat_id: str, message: str) -> str:
-    actions = _define_user_actions(chat_id)
+def _form_data_response(bot, chat_id, message):
+    # type: (object, str, str) -> str
+    actions = _define_user_actions(chat_id, message)
     user_has_session, user_wants_more_info, user_needs_help = actions
     logger.debug(f'{chat_id=}, {message=}')
 
