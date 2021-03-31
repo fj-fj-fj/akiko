@@ -13,7 +13,7 @@ bot.update_webhook()
 
 
 @app.route('/', methods=['POST', 'GET'])
-def main(bot: object) -> Union[Response, str]:
+def main() -> Union[Response, str]:
     if request.method == 'POST':
         r: dict = request.get_json()
         chat_id, data = form_response_to_user(bot, r)
