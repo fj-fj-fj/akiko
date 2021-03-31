@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-
-"""This module contains app Flask and main function"""
-
-import sys
 import re
+from logging import Logger
 
 from flask import Flask
 from flask import request
@@ -13,6 +9,7 @@ from api.telegram.bot import Bot
 from config import CONFIG_KWARGS
 from db import shelve_db
 
+logger: Logger = logger(__file__)
 
 app = Flask(__name__)
 bot = Bot(**CONFIG_KWARGS)
@@ -33,7 +30,7 @@ def main() -> str:
 
     """
 
-    print(' * START main.main() * '.center(130, '~'), file=sys.stderr)
+    logger.debug(' * BOT STARTED * '.center(130, '~'))
 
     if request.method == 'POST':
 
@@ -48,8 +45,7 @@ def main() -> str:
             need_more_info = message in ('information', '/info', 'info', 'i')
             need_help = message in ('/start', '/help', 'h', 'sos')
 
-            print(f'main/try: message={message}, need_info={need_more_info}, \
-                  session={session}', file=sys.stderr)
+            logger.debug(f'{message=}, {need_more_info=}, {session=}')
                 
             if need_more_info and not session:
                 data: str = shelve_db.display_error_message('session')
@@ -75,12 +71,11 @@ def main() -> str:
 
             data = callback_data if callback_data else shelve_db.display_error_message('unknown')
 
-            print(f'main/except: click Buy={bot._CALLBACK_QUERY_ID}, \
-                  message={message}, data={data}', file=sys.stderr)
+            logger.debug(f'{bot._CALLBACK_QUERY_ID=}, {message=}, {data=}')
 
         bot.send_message(chat_id, text=data)
 
-        print(f' * FINISH main.main() * \njsonify(r)={jsonify(r)} ', end='\n\n', file=sys.stderr)
+        logger.debug(f' * bot FINISHED * \n{jsonify(r)}\n\n')
 
         return jsonify(r)
 
