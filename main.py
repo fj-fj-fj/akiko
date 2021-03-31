@@ -9,9 +9,9 @@ from flask import Flask
 from flask import request
 from flask import jsonify
 
+from api.telegram.bot import Bot
 from config import CONFIG_KWARGS
 from db import shelve_db
-from bot import Bot
 
 
 app = Flask(__name__)
