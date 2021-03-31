@@ -10,7 +10,6 @@ __all__ = (
     'touch_session',
     'has_user_session',
     'fetch_last_coin_id',
-    'display_error_message'
 )
 
 loger = logging.getLogger(__file__)
@@ -57,18 +56,3 @@ def fetch_last_coin_id(chat_id: int) -> str:
         id_ = {i for i in klist if i == str(chat_id)}.pop()
 
         return db[id_]
-
-
-def display_error_message(key: str) -> str:
-    """
-    This function takes an error type and returns an appropriate message.
-
-    """
-    loger.debug(f'Error message key: {key}')
-
-    return {
-        'session':
-            "Session error! Enter `Bitcoin` | `btc` or other coin (‾◡◝)",
-        'match': r'Match error! ¯\_(ツ)_/¯',
-        'unknown': 'Sorry! Unknown error!  ( . .)'
-    }[key]
