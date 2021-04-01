@@ -25,9 +25,11 @@ TIM = 'Arise, you have nothing to lose but your barbed wire fences!'
 
 HEADERS = {
     'accept': '*/*',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
-    			   AppleWebKit/537.36 (KHTML, like Gecko) \
-    			   Chrome/88.0.4324.182 Safari/537.36',
+    'User-Agent': (
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+        'AppleWebKit/537.36 (KHTML, like Gecko)'
+        'Chrome/88.0.4324.182 Safari/537.36'
+    ),
     'Content-Type': 'application/json;charset=UTF-8',
     'X-CMC_PRO_API_KEY': __CMC_PRO_API_KEY,
 }

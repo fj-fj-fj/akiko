@@ -37,7 +37,7 @@ class Bot(CoinDataFetcher):
 
         url = Bot.URL + 'sendMessage'
         data = {'chat_id': chat_id, 'text': ''}
-        
+
         if Bot._CALLBACK_QUERY_ID or 'error' in text:
             data['text'] += text
             Bot._CALLBACK_QUERY_ID = 0
@@ -55,7 +55,7 @@ class Bot(CoinDataFetcher):
             data['reply_markup'] = {
                 'inline_keyboard': [[
                     {'text': '฿uy' if bitcoin_fetched else 'Buy',
-                    'callback_data': 'In the near future you can do it'}
+                     'callback_data': 'In the near future you can do it'}
                 ]]
             }
             return self.session.post(url, json=data).json()
@@ -70,7 +70,7 @@ class Bot(CoinDataFetcher):
                              Enter /help or h if you need help\n\n'
 
         for key, value in text.items():
-            if not value: continue
+            if not value: continue  # noqa: E701
             value = ' | '.join([i for i in value])
             data['text'] += key + ' - ' + value + '\n\n'
 

@@ -18,7 +18,7 @@ class CoinDataFetcher:
         self.session.headers = config_kw['headers']
         self.coinmarketcap_url = config_kw['url']
         self.timeout = config_kw['timeout']
-                    
+
     def extract_coin_price(self, coin_ID: int) -> str:
         """This endpoint searches a coin by ID and returns it if exists.
 
