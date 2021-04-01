@@ -4,7 +4,7 @@ from flask import Flask, Response, jsonify, request
 
 from api.telegram.bot import Bot
 from api.telegram.utils import form_response_to_user
-from config import CONFIG_KWARGS
+from config.settings import CONFIG_KWARGS
 
 
 app = Flask(__name__)

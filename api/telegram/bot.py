@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from api.coinmarketcap.core import CoinDataFetcher
 from db import shelve_db
-from utils.webhook import configurate_webhook
+from config.webhook import configurate_webhook
 
 logger: Logger = Logger(__file__)
 

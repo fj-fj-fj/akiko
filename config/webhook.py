@@ -47,7 +47,7 @@ def _set_webhook(self: object, host: str) -> Dict[str, Any]:
 
 
 def _set_webhook_on_localhost(self: object, is_hook: str) -> None:
-    from utils.tunnel import TUNNEL_URL
+    from config.tunnel import TUNNEL_URL
 
     if is_hook == TUNNEL_URL:
         return logger.debug('Session with TUNNEL_URL')
