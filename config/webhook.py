@@ -21,7 +21,7 @@ def configurate_webhook(self: object) -> None:
     is_hook: str = r.get('result', {}).get('url')
 
     if self.IS_LOCALHOST:
-        _set_webhook_on_localhost(is_hook, self.URL)
+        _set_webhook_on_localhost(self, is_hook)
 
     if is_hook == self.APP_NAME:
         return logger.debug('Session with APP_NAME')

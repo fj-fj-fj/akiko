@@ -1,18 +1,18 @@
 import json
 import requests
-import subprocess
+from subprocess import PIPE, Popen
 from time import sleep
 
-from misc import NGROK_PATH, LOCALHOST_URL
+from misc import NGROK_PATH, LOCALHOST_API
 
-_ngrok = subprocess.Popen([NGROK_PATH, 'http', '5000'], stdout=subprocess.PIPE)
+try:
+    (lambda: Popen([NGROK_PATH['win'], 'http', '5000'], stdout=PIPE))()
+except FileNotFoundError:
+    (lambda: Popen(['ngrok', 'http', '5000'], stdout=PIPE))()
 
-sleep(3)  # to allow the ngrok to fetch the url from the server
+sleep(3)
 
-_tunnel_url = requests.get(LOCALHOST_URL).text
-
+_tunnel_url = requests.get(LOCALHOST_API, timeout=3).text
 _j = json.loads(_tunnel_url)
-
 _tunnel_url = _j['tunnels'][1]['public_url']
-
 TUNNEL_URL = _tunnel_url.replace('http', 'https')
