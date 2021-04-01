@@ -1,5 +1,8 @@
 import logging
+import logging.config
 import sys
+
+from config.base_logging import BASE_LOGGING
 
 try:
     from misc import (
@@ -15,7 +18,7 @@ except (ModuleNotFoundError, ImportError):
     APP_NAME = os.environ.get('APP_NAME')
     HOUM_USER = os.environ.get('HOUM_USER')
 
-logging.basicConfig(level=logging.DEBUG)
+logging.config.dictConfig(BASE_LOGGING)
 logging.getLogger('urllib3').setLevel(logging.WARNING)
 
 TIM = 'Arise, you have nothing to lose but your barbed wire fences!'
