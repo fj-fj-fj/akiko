@@ -1,5 +1,6 @@
 # Akiko Bot
 
+[![Flask](https://img.shields.io/badge/-flask-red?style=flat&logo=flask)](https://palletsprojects.com/p/flask/)
 [![Heroku](https://heroku-badge.herokuapp.com/?app=heroku-badge&style=flat)](https://heroku-badge.herokuapp.com/?app=btcakiko)
 [![Akiko bot](https://img.shields.io/badge/Akiko%20bot-telegram-0088cc.svg)](http://t.me/btcakikobot)
 
@@ -7,7 +8,7 @@
 ## Introduction
 It's a simple bot that uses Telegram and Coinmarketcap API.
 
-Bot cat show the current price of the coin, as well as general information about it.
+The Bot can show the current price of the coin, as well as general information about it.
 
 ## Usage
 ```
