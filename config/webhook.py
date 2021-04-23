@@ -16,15 +16,15 @@ def configurate_webhook(self: object) -> None:
 
     """
     r: dict = _get_webhook_info(self)
-    logger.debug(f'Webhook response: {r}')
+    logger.debug(f"Webhook response: {r}")
 
-    is_hook: str = r.get('result', {}).get('url')
+    is_hook: str = r.get("result", {}).get("url")
 
     if self.IS_LOCALHOST:
         _set_webhook_on_localhost(self, is_hook)
 
     if is_hook == self.APP_NAME:
-        return logger.debug('Session with APP_NAME')
+        return logger.debug("Session with APP_NAME")
 
     _delete_webhook(self)
     sleep(0.2)
@@ -32,17 +32,16 @@ def configurate_webhook(self: object) -> None:
 
 
 def _get_webhook_info(self: object) -> Dict[str, Any]:
-    return self.session.get(f'{self.URL}getwebhookinfo').json()
+    return self.session.get(f"{self.URL}getwebhookinfo").json()
 
 
 def _delete_webhook(self: object) -> None:
-    self.session.get(self.URL + 'deleteWebhook')
+    self.session.get(self.URL + "deleteWebhook")
 
 
 def _set_webhook(self: object, host: str) -> Dict[str, Any]:
-    r: dict = self.session.get(
-        f'{self.URL}setWebhook', params={'url': host}).json()
-    logger.debug(f'Set webhook with {host}: {r}')
+    r: dict = self.session.get(f"{self.URL}setWebhook", params={"url": host}).json()
+    logger.debug(f"Set webhook with {host}: {r}")
     return r
 
 
@@ -50,7 +49,7 @@ def _set_webhook_on_localhost(self: object, is_hook: str) -> None:
     from config.tunnel import TUNNEL_URL
 
     if is_hook == TUNNEL_URL:
-        return logger.debug('Session with TUNNEL_URL')
+        return logger.debug("Session with TUNNEL_URL")
 
     _delete_webhook(self)
     sleep(0.2)

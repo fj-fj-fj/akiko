@@ -12,9 +12,9 @@ bot = Bot(**CONFIG_KWARGS)
 bot.update_webhook()
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route("/", methods=["POST", "GET"])
 def main() -> Union[Response, str]:
-    if request.method == 'POST':
+    if request.method == "POST":
         r: dict = request.get_json()
         chat_id, data = form_response_to_user(bot, r)
         bot.send_message(chat_id, text=data)
@@ -22,5 +22,5 @@ def main() -> Union[Response, str]:
     return bot.HTML
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=bot.IS_LOCALHOST)

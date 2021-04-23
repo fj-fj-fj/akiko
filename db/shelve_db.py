@@ -7,14 +7,14 @@ import shelve
 from typing import Optional
 
 __all__ = (
-    'touch_session',
-    'has_user_session',
-    'fetch_last_coin_id',
+    "touch_session",
+    "has_user_session",
+    "fetch_last_coin_id",
 )
 
 loger = logging.getLogger(__file__)
 
-_SHELVE_DB = 'shelve.db'
+_SHELVE_DB = "shelve.db"
 
 
 def touch_session(chat_id: int, coin_id: Optional[str]) -> None:
@@ -22,9 +22,10 @@ def touch_session(chat_id: int, coin_id: Optional[str]) -> None:
     Create a user session or update and save last coin ID.
 
     """
-    loger.debug(f'Chat ID:{chat_id}, Coin ID:{coin_id}')
+    loger.debug(f"Chat ID:{chat_id}, Coin ID:{coin_id}")
 
-    if coin_id is None: return  # noqa:E701
+    if coin_id is None:
+        return  # noqa:E701
 
     with shelve.open(_SHELVE_DB) as db:
         db[str(chat_id)] = coin_id
@@ -35,7 +36,7 @@ def has_user_session(chat_id: int) -> bool:
     Check if the user has a session so that he can fully use the Bot commands.
 
     """
-    loger.debug(f'Chat ID:{chat_id}')
+    loger.debug(f"Chat ID:{chat_id}")
 
     with shelve.open(_SHELVE_DB) as db:
         klist = list(db.keys())
@@ -49,7 +50,7 @@ def fetch_last_coin_id(chat_id: int) -> str:
     This case can be used to call this function.
 
     """
-    loger.debug(f'Chat ID:{chat_id}')
+    loger.debug(f"Chat ID:{chat_id}")
 
     with shelve.open(_SHELVE_DB) as db:
         klist = list(db.keys())

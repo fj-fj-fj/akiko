@@ -39,7 +39,7 @@ The Bot can show the current price of the coin, as well as general information a
 [you]: btc
 [bot]: $  59309.87967711506
 ```
-Bot was created to receive up-tp-date coin-info without leaving my favorite messendger. 
+Bot was created to receive up-tp-date coin-info without leaving my favorite messendger.
 It has a `buy` button, but it is not active _(yet)_.
 
 

@@ -12,8 +12,7 @@ def display_error_message(type_error: str) -> str:
 
     """
     return {
-        'session':
-            "Session error! Enter coin (e.g. bitcoin, doge) (‾◡◝)",
-        'match': r'Match error! ¯\_(ツ)_/¯',
-        'unknown': 'Sorry! Unknown error!  ( . .)'
+        "session": "Session error! Enter coin (e.g. bitcoin, doge) (‾◡◝)",
+        "match": r"Match error! ¯\_(ツ)_/¯",
+        "unknown": "Sorry! Unknown error!  ( . .)",
     }[type_error]

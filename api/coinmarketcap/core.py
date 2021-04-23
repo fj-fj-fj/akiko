@@ -15,9 +15,9 @@ class CoinDataFetcher:
     def __init__(self, **config_kw) -> None:
         self.logger: Logger = Logger(__file__)
         self.session: Session = Session()
-        self.session.headers = config_kw['headers']
-        self.coinmarketcap_url = config_kw['url']
-        self.timeout = config_kw['timeout']
+        self.session.headers = config_kw["headers"]
+        self.coinmarketcap_url = config_kw["url"]
+        self.timeout = config_kw["timeout"]
 
     def extract_coin_price(self, coin_ID: int) -> str:
         """This endpoint searches a coin by ID and returns it if exists.
@@ -32,13 +32,13 @@ class CoinDataFetcher:
                 Akiko [out]: $  `219.5910124308485`
 
         """
-        url: str = f'{self.coinmarketcap_url}quotes/latest?id={coin_ID}'
+        url: str = f"{self.coinmarketcap_url}quotes/latest?id={coin_ID}"
         r: Dict[str, Any] = self.session.get(url, timeout=self.timeout).json()
 
-        price = str(r['data'][str(coin_ID)]['quote']['USD']['price'])
-        answer: str = f'$  `{price}`'
+        price = str(r["data"][str(coin_ID)]["quote"]["USD"]["price"])
+        answer: str = f"$  `{price}`"
 
-        self.logger.debug(f'Coin ID:{coin_ID}, Price:{answer}')
+        self.logger.debug(f"Coin ID:{coin_ID}, Price:{answer}")
         return answer
 
     def fetch_coin_id(self, message: str) -> Optional[int]:
@@ -53,7 +53,7 @@ class CoinDataFetcher:
             Coin price or None
 
         """
-        url: str = f'{self.coinmarketcap_url}map'
+        url: str = f"{self.coinmarketcap_url}map"
         r: Dict[str, Any] = self.session.get(url, timeout=self.timeout).json()
 
         for coin in r["data"]:
@@ -62,10 +62,10 @@ class CoinDataFetcher:
 
             if message in (name, symbol):
                 coin_id = coin["id"]
-                self.logger.debug(f'Message:{message} with Coin ID:{coin_id}')
+                self.logger.debug(f"Message:{message} with Coin ID:{coin_id}")
                 return coin_id
 
-        self.logger.debug(f'Message:{message} with Coin ID:None')
+        self.logger.debug(f"Message:{message} with Coin ID:None")
 
     def display_coin_info(self, coin_id: int) -> str:
         """
@@ -73,12 +73,14 @@ class CoinDataFetcher:
         links to website, social networks, exoplorers, tech doc, sourc code.
 
         """
-        url: str = f'{self.coinmarketcap_url}info?id={coin_id}'
+        url: str = f"{self.coinmarketcap_url}info?id={coin_id}"
         r: Dict[str, Any] = self.session.get(url, timeout=self.timeout).json()
 
-        links = r['data'][next(iter(r['data']))]['urls']  # e.g. btc - "data": {"1": {... # noqa E501
-        name_coin = r['data'][next(iter(r['data']))]['name']
-        links['🗝'] = coin_id, name_coin
+        links = r["data"][next(iter(r["data"]))][
+            "urls"
+        ]  # e.g. btc - "data": {"1": {... # noqa E501
+        name_coin = r["data"][next(iter(r["data"]))]["name"]
+        links["🗝"] = coin_id, name_coin
 
-        self.logger.debug(f'Coin ID:{coin_id} with links:\n{coin_id}')
+        self.logger.debug(f"Coin ID:{coin_id} with links:\n{coin_id}")
         return json.dumps(links)
