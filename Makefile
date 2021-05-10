@@ -6,6 +6,10 @@ style:
 grep-review-code:
 	./find_flaws.sh
 
+# https://github.com/zricethezav/gitleaks
+gitleaks:
+	gitleaks --path='.' -v
+
 security:
 	make grep-review-code
 
@@ -14,4 +18,4 @@ precommit:
 
 .PHONY: all
 all:
-	make precommit security
+	make precommit gitleaks security
